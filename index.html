@@ -32,7 +32,7 @@
         overflow-y: auto;
 
         scroll-behavior: smooth;
-       
+        scroll-snap-type: y mandatory;
         padding-left: env(safe-area-inset-left);
         padding-right: env(safe-area-inset-right);
         padding-top: env(safe-area-inset-top);
@@ -44,7 +44,8 @@
       #quoteSection {
         min-height: 100vh;
 
-       
+         scroll-snap-align: start;
+        scroll-snap-stop: always;
       }
 
       /* ===========================
@@ -510,7 +511,8 @@
         -webkit-mask:
           linear-gradient(#000 0 0) content-box,
           linear-gradient(#000 0 0);
-
+  -webkit-mask-composite: xor;
+        mask-composite: exclude;
 
         pointer-events: none;
       }
@@ -709,7 +711,7 @@
         align-items: center;
 
         overflow: hidden;
-
+ scroll-snap-align: start;
       }
 
       /* Background Video */
@@ -1132,7 +1134,10 @@
 
         setTimeout(() => {
           videoContainer.style.display = "none";
-          window.scrollTo(0, 0);
+         window.scrollTo({
+            top: 0,
+            behavior: "instant",
+          });
         }, 2000);
         endScreen.classList.add("show");
         setTimeout(() => {
