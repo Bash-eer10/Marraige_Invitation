@@ -1,0 +1,1203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Intro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        scroll-behavior: smooth;
+        scroll-snap-type: y mandatory;
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      #heroSection,
+      #countdownSection,
+      #quoteSection {
+        min-height: 100vh;
+
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      /* ===========================
+   VIDEO
+=========================== */
+
+      #videoContainer {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        transition: opacity 2s ease;
+      }
+
+      #videoContainer.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #introVideo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      #introVideo,
+      #beachVideo,
+      #roadVideo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      video::-webkit-media-controls {
+        display: none !important;
+      }
+      video::-webkit-media-controls-enclosure {
+        display: none !important;
+      }
+
+      #tapToStart {
+        position: absolute;
+        left: 50%;
+        bottom: 40px;
+        transform: translateX(-50%);
+        z-index: 20;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+
+        color: #3f3204;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 22px;
+        letter-spacing: 2px;
+
+        cursor: pointer;
+
+        animation: float 2s ease-in-out infinite;
+      }
+
+      #tapToStart span {
+        padding: 12px 28px;
+        border-radius: 40px;
+
+        /* background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(10px); */
+
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: rotate(45deg) translateY(0);
+        }
+        50% {
+          transform: rotate(45deg) translateY(10px);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-8px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        #tapToStart {
+          bottom: 18px;
+          font-size: 18px;
+        }
+
+        #tapToStart span {
+          padding: 10px 22px;
+        }
+      }
+      /* ===========================
+   END SCREEN
+=========================== */
+
+      #endScreen {
+        width: 100%;
+        min-height: 200vh;
+
+        display: flex;
+        flex-direction: column;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition: opacity 4s ease;
+
+        position: relative;
+      }
+
+      #endScreen.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* Background */
+
+      .background {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: opacity 4s ease-in-out;
+      }
+
+      #dayBackground {
+        background-image: url("day.webp");
+        opacity: 1;
+        z-index: 1;
+      }
+
+      #nightBackground {
+        background-image: url("night.webp");
+        opacity: 0;
+        z-index: 2;
+      }
+
+      /* Overlay */
+
+      /* #endScreen::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 3;
+      } */
+
+      #heroSection::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+      }
+
+      /* Moon */
+
+      #moon {
+        position: absolute;
+        top: 40px;
+        right: 60px;
+
+        width: 220px;
+        max-width: 18vw;
+        min-width: 120px;
+
+        opacity: 0;
+
+        transform: translateY(-80px) scale(0.6);
+
+        transition:
+          opacity 3s ease,
+          transform 4s ease;
+
+        z-index: 5;
+
+        pointer-events: none;
+
+        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9))
+          drop-shadow(0 0 70px rgba(255, 255, 255, 0.45));
+      }
+
+      @media (max-width: 768px) {
+        #moon {
+          width: 120px;
+          top: 25px;
+          right: 20px;
+        }
+      }
+
+      /* Content */
+
+      .content {
+        position: relative;
+        z-index: 4;
+        top: 20vh;
+        text-align: center;
+        color: #fff;
+        padding: 20px;
+
+        opacity: 0;
+        transform: translateY(40px);
+
+        transition:
+          opacity 1.5s ease,
+          transform 1.5s ease;
+      }
+
+      #endScreen.show .content {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .content h1 {
+        font-size: 72px;
+        margin-bottom: 20px;
+        text-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
+      }
+
+      .content p {
+        font-size: 28px;
+        text-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
+      }
+
+      /* Responsive */
+
+      @media (max-width: 768px) {
+        .content h1 {
+          font-size: 48px;
+        }
+
+        .content p {
+          font-size: 20px;
+        }
+      }
+
+      .scrollIndicator {
+        position: absolute;
+        bottom: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+
+        color: #fff6d9;
+        font-family: "Cormorant Garamond", serif;
+        letter-spacing: 3px;
+        font-size: 16px;
+
+        opacity: 0;
+
+        animation: scrollHint 3s ease-in-out infinite;
+      }
+
+      .scrollMouse {
+        width: 28px;
+        height: 46px;
+
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+
+        display: flex;
+        justify-content: center;
+
+        padding-top: 6px;
+      }
+
+      .scrollWheel {
+        width: 4px;
+        height: 8px;
+
+        background: #fff6d9;
+        border-radius: 10px;
+
+        animation: wheelMove 1.5s ease-in-out infinite;
+      }
+
+      @keyframes wheelMove {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        70% {
+          transform: translateY(14px);
+          opacity: 0;
+        }
+
+        100% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+      }
+
+      @keyframes scrollHint {
+        0%,
+        20% {
+          opacity: 0;
+        }
+
+        30%,
+        70% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .scrollIndicator {
+          bottom: 20px;
+          font-size: 13px;
+          letter-spacing: 2px;
+        }
+
+        .scrollMouse {
+          width: 24px;
+          height: 38px;
+        }
+      }
+
+      /* Countdown Blue Layer */
+
+      /* Image Area */
+
+      #heroSection {
+        position: relative;
+        width: 100%;
+        min-height: 100svh;
+        overflow: hidden;
+      }
+
+      /* Countdown Area */
+
+      #countdownSection {
+        position: relative;
+
+        width: 100%;
+        min-height: 100vh;
+
+        overflow: hidden;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Background Video */
+      #beachVideo {
+        position: absolute;
+        inset: 0;
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        z-index: 1;
+      }
+      .countdownContent {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        width: 100%;
+        padding: 20px;
+        color: #fff;
+      }
+
+      /* Dark Overlay */
+      .countdownOverlay {
+        position: absolute;
+        inset: 0;
+
+        background: linear-gradient(
+          rgba(10, 15, 25, 0.45),
+          rgba(20, 25, 35, 0.55)
+        );
+
+        z-index: 2;
+      }
+
+      /* Countdown Content */
+      .countdownContent h2 {
+        font-family: "Great Vibes", cursive;
+        font-size: 70px;
+        font-weight: 400;
+        color: #ffffff;
+        margin-bottom: 55px;
+        text-shadow: 0 0 25px rgba(255, 246, 217, 0.35);
+      }
+
+      @media (max-width: 768px) {
+        .countdownContent h2 {
+          font-size: 48px;
+        }
+      }
+
+      .countdown {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+
+      .time-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .time-card:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+
+      .time-card:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+
+      .time-card:nth-child(4) {
+        animation-delay: 0.9s;
+      }
+
+      .circle {
+        position: relative;
+        background: transparent;
+        width: 145px;
+        height: 145px;
+        border-radius: 50%;
+
+        overflow: hidden;
+      }
+
+      .circle::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 3px; /* Border thickness */
+        border-radius: 50%;
+        background: conic-gradient(#000000, #000000, #000, #000000, #d8b46a);
+
+        animation: rotateBorder 6s linear infinite;
+
+        /* Show only the border */
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+
+        pointer-events: none;
+      }
+
+      @keyframes rotateBorder {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes rotateBorder {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .circle span {
+        font-size: 60px;
+        font-weight: 500;
+
+        line-height: 2;
+      }
+
+      .time-card small {
+        margin-top: 18px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 18px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+
+      /* Mobile */
+
+      @media (max-width: 768px) {
+        .countdown {
+          gap: 18px;
+        }
+
+        .circle {
+          width: 90px;
+          height: 90px;
+        }
+
+        .circle span {
+          font-size: 42px;
+        }
+
+        .time-card small {
+          font-size: 13px;
+          letter-spacing: 2px;
+        }
+      }
+
+      .wedding-copy {
+        position: absolute;
+        z-index: 5;
+
+        top: 21%;
+        left: 5%;
+        transform: translateX(-50%);
+
+        width: min(92%, 700px);
+        padding: 0 20px;
+
+        text-align: center;
+        color: #17375f;
+
+        /* Initial hidden state */
+        opacity: 0;
+        transform: translate(-80px, 0);
+
+        transition:
+          color 2.5s ease,
+          text-shadow 2.5s ease;
+      }
+
+      @keyframes weddingSlideIn {
+        0% {
+          opacity: 0;
+          transform: translate(-80px, 0);
+        }
+
+        100% {
+          opacity: 1;
+          transform: translate(0, 0);
+        }
+      }
+
+      .wedding-copy.show {
+        animation: weddingSlideIn 2s ease forwards;
+      }
+
+      .wedding-copy.night {
+        color: #fff6d9;
+
+        text-shadow:
+          0 2px 18px rgba(0, 0, 0, 0.75),
+          0 0 22px rgba(255, 246, 217, 0.35);
+      }
+
+      .wedding-copy__kicker,
+      .wedding-copy__date {
+        font-family: "Cormorant Garamond", serif;
+
+        font-size: clamp(14px, 3vw, 22px);
+
+        letter-spacing: 3px;
+
+        text-transform: uppercase;
+
+        color: inherit;
+      }
+      .wedding-copy__names {
+        font-family: "Great Vibes", cursive;
+
+        font-size: clamp(56px, 12vw, 95px);
+
+        font-weight: 500;
+
+        line-height: 1.5;
+
+        margin: 18px 0;
+
+        color: inherit;
+      }
+
+      .ampersand {
+        display: inline-block;
+        margin: 0 clamp(10px, 3vw, 28px);
+      }
+      .wedding-copy__date {
+        margin: 0;
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: 14px;
+        line-height: 2;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      /* ===========================
+   Quote Section
+=========================== */
+
+      #quoteSection {
+        position: relative;
+        width: 100%;
+        height: 100svh; /* Better than 100vh on mobile */
+        min-height: 100svh;
+        overflow: hidden;
+      }
+
+      .quote-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* fills screen */
+        object-position: center;
+        z-index: 0;
+      }
+
+      #quoteSection::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+
+      .quote-container {
+        position: relative;
+        z-index: 2;
+      }
+
+      #quoteSection {
+        background: url("/happy_married.png") center/cover no-repeat;
+      }
+
+      @media (max-width: 768px) {
+        #quoteSection {
+          background-image: url("/happy_married.png");
+        }
+      }
+      /* =====================================
+   LOCATION SECTION
+===================================== */
+
+      #locationSection {
+        position: relative;
+
+        width: 100%;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        overflow: hidden;
+
+        scroll-snap-align: start;
+      }
+
+      /* Background Video */
+
+      #roadVideo {
+        position: absolute;
+        inset: 0;
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        z-index: 1;
+      }
+
+      /* Overlay */
+
+      .locationOverlay {
+        position: absolute;
+        inset: 0;
+
+        background: rgba(0, 0, 0, 0.35);
+
+        z-index: 2;
+      }
+
+      /* Content */
+      .locationContent {
+        position: relative;
+        z-index: 5;
+
+        width: 100%;
+        max-width: 1200px;
+
+        padding: 60px 25px;
+
+        color: #fff;
+        text-align: center;
+      }
+
+      .venueTag {
+        color: #f5e6b3;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        font-size: 34px;
+        font-family: "Cormorant Garamond", serif;
+      }
+
+      .locationContent h2 {
+        font-family: "Great Vibes", cursive;
+        font-size: 72px;
+        color: white;
+        margin-bottom: 70px;
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .venueWrapper {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        flex-wrap: wrap;
+      }
+
+      .venue {
+        width: 340px;
+
+        padding: 45px 35px;
+
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        border-radius: 30px;
+
+        transition: 0.4s;
+
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
+      }
+
+      .venue:hover {
+        transform: translateY(-12px);
+
+        border-color: #f5d78b;
+
+        box-shadow: 0 30px 70px rgba(245, 215, 139, 0.25);
+      }
+
+      .venueIcon {
+        width: 65px;
+        height: 65px;
+
+        margin: auto;
+
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 30px;
+        background: linear-gradient(342deg, #ffa800, #ff0e7b);
+
+        color: #333;
+
+        margin-bottom: 25px;
+      }
+
+      .venue h3 {
+        font-size: 34px;
+
+        font-family: "Cormorant Garamond", serif;
+
+        color: #fff6d9;
+      }
+
+      .venueLine {
+        display: block;
+
+        width: 70px;
+        height: 2px;
+
+        margin: 22px auto;
+
+        background: #f5d78b;
+      }
+
+      .venue p {
+        font-size: 18px;
+
+        line-height: 2;
+
+        color: #eee;
+
+        margin-bottom: 35px;
+      }
+
+      .venueBtn {
+        display: inline-block;
+
+        padding: 15px 38px;
+
+        border-radius: 40px;
+
+        text-decoration: none;
+
+        color: #ffffff;
+
+        font-weight: bold;
+
+        background: linear-gradient(342deg, #ffa800, #ff0e7b);
+
+        transition: 0.35s;
+      }
+
+      .venueBtn:hover {
+        background: white;
+
+        transform: scale(1.05);
+      }
+
+      @media (max-width: 768px) {
+        .locationContent h2 {
+          font-size: 25px;
+          margin-bottom: 45px;
+          letter-spacing: 4px;
+          word-spacing: 4px;
+        }
+
+        .venue {
+          width: 100%;
+
+          max-width: 340px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="videoContainer">
+      <video
+        id="introVideo"
+        muted
+        preload="auto"
+        playsinline
+        controlsList="nodownload nofullscreen noremoteplayback"
+      >
+        <source src="intro.mp4" type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
+
+      <!-- Background Music -->
+      <audio id="bgMusic" preload="auto">
+        <source src="Love.mp3" type="audio/mpeg" />
+      </audio>
+
+      <div id="tapToStart">
+        <span> Click to Open</span>
+      </div>
+    </div>
+
+    <div id="endScreen">
+      <!-- Top Image Section -->
+      <div id="heroSection">
+        <div id="dayBackground" class="background"></div>
+
+        <div id="nightBackground" class="background"></div>
+
+        <img src="moon.webp" id="moon" alt="Moon" />
+
+        <div class="content wedding-copy">
+          <p class="wedding-copy__kicker">We Are Getting Married</p>
+          <!-- <h1 class="wedding-copy__names">Nafeen&nbsp;&amp;&nbsp;Faritha</h1> -->
+          <h1 class="wedding-copy__names">
+            Nafeen
+            <span class="ampersand">&amp;</span>
+            Faritha
+          </h1>
+          <p class="wedding-copy__date">13th September 2026</p>
+        </div>
+        <div class="scrollIndicator">
+          <span>Scroll Down</span>
+          <div class="scrollMouse">
+            <div class="scrollWheel"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Countdown Section -->
+      <div id="countdownSection">
+        <!-- Background Video -->
+        <video id="beachVideo" autoplay muted loop playsinline>
+          <source src="/majid.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Dark Overlay -->
+        <div class="countdownOverlay"></div>
+
+        <!-- Countdown Content -->
+        <div class="countdownContent">
+          <h2>Our Forever Begins In</h2>
+
+          <div id="countdown" class="countdown">
+            <div class="time-card">
+              <div class="circle">
+                <span id="days">00</span>
+              </div>
+              <small>Days</small>
+            </div>
+
+            <div class="time-card">
+              <div class="circle">
+                <span id="hours">00</span>
+              </div>
+              <small>Hours</small>
+            </div>
+
+            <div class="time-card">
+              <div class="circle">
+                <span id="minutes">00</span>
+              </div>
+              <small>Minutes</small>
+            </div>
+
+            <div class="time-card">
+              <div class="circle">
+                <span id="seconds">00</span>
+              </div>
+              <small>Seconds</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section id="quoteSection">
+        <img src="/happy_married.png" class="quote-bg" alt="" />
+        <!-- <div class="quote-container">Alhamdhuillah</div> -->
+      </section>
+
+      <!-- ===========================
+   Location Section
+=========================== -->
+
+      <section id="locationSection">
+        <!-- Background Video -->
+        <video id="roadVideo" autoplay muted loop playsinline>
+          <source src="/boat.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Dark Overlay -->
+        <div class="locationOverlay"></div>
+
+        <!-- Content -->
+        <div class="locationContent">
+          <p class="venueTag">Venues</p>
+
+          <h2>We Can't Wait To Celebrate With You</h2>
+
+          <div class="venueWrapper">
+            <div class="venue">
+              <div class="venueIcon">💍</div>
+              <h4>13th September 2026</h4>
+              <h3>Nikah Ceremony</h3>
+
+              <span class="venueLine"></span>
+
+              <p>
+                Sangamam Mahal<br />
+                Podanur Main Road<br />
+                Kurichi Pirivu<br />
+                Coimbatore
+              </p>
+
+              <a
+                href="https://maps.app.goo.gl/umSqtcycqNLKPRKr8"
+                target="_blank"
+                class="venueBtn"
+              >
+                <i
+                  class="fa-solid fa-map-location-dot"
+                  style="margin-right: 6px"
+                ></i>
+                View Location
+              </a>
+            </div>
+
+            <div class="venue">
+              <div class="venueIcon">🎉</div>
+              <h4>16th September 2026</h4>
+              <h3>Reception Ceremony</h3>
+
+              <span class="venueLine"></span>
+
+              <p>
+                Harini Mahal<br />
+                Bhavanisagar Road<br />
+                Punjai Puliampatti
+              </p>
+
+              <a
+                href="https://maps.app.goo.gl/epMJ1cdXhRdLV7qS8"
+                target="_blank"
+                class="venueBtn"
+              >
+                <i
+                  class="fa-solid fa-map-location-dot"
+                  style="margin-right: 6px"
+                ></i>
+                View Location
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const video = document.getElementById("introVideo");
+      const bgMusic = document.getElementById("bgMusic");
+      const videoContainer = document.getElementById("videoContainer");
+      const tapToStart = document.getElementById("tapToStart");
+      const endScreen = document.getElementById("endScreen");
+
+      const dayBackground = document.getElementById("dayBackground");
+      const nightBackground = document.getElementById("nightBackground");
+
+      const moon = document.getElementById("moon");
+      const weddingCopy = document.querySelector(".wedding-copy");
+
+      async function startVideo() {
+        if (started) return;
+
+        started = true;
+
+        tapToStart.style.opacity = "0";
+        tapToStart.style.pointerEvents = "none";
+
+        try {
+          bgMusic.volume = 1.0;
+          bgMusic.loop = true;
+          await bgMusic.play();
+          await video.play();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      video.addEventListener("click", startVideo);
+      tapToStart.addEventListener("click", startVideo);
+
+      /* Day → Night transition */
+
+      video.controls = false;
+
+      window.addEventListener("load", () => {
+        video.pause();
+        video.currentTime = 0;
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+      });
+
+      let started = false;
+
+      video.addEventListener("click", async () => {
+        if (started) return;
+
+        started = true;
+
+        try {
+          bgMusic.volume = 1.0;
+          bgMusic.loop = true;
+          await bgMusic.play();
+          await video.play();
+        } catch (err) {
+          console.error("Playback failed:", err);
+        }
+      });
+      video.addEventListener("contextmenu", (e) => e.preventDefault());
+
+      video.addEventListener("ended", () => {
+        // bgMusic.pause();
+        // bgMusic.currentTime = 0;
+        videoContainer.classList.add("fade-out");
+
+        endScreen.classList.add("show");
+        document.documentElement.style.overflowY = "auto";
+        document.body.style.overflowY = "auto";
+
+        setTimeout(() => {
+          videoContainer.style.display = "none";
+          window.scrollTo({
+            top: 0,
+            behavior: "instant",
+          });
+        }, 2000);
+        endScreen.classList.add("show");
+        setTimeout(() => {
+          weddingCopy.classList.add("show");
+        }, 300);
+
+        setTimeout(() => {
+          dayBackground.style.opacity = "0";
+          nightBackground.style.opacity = "1";
+
+          moon.style.opacity = "1";
+          moon.style.transform = "translateY(0) scale(1)";
+
+          weddingCopy.classList.add("night");
+        }, 3000);
+      });
+
+      const targetDate = new Date("2026-09-13T00:00:00").getTime();
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+          document.getElementById("countdown").innerHTML =
+            "<h2>Event Started!</h2>";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = days;
+        document.getElementById("hours").textContent = hours
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("minutes").textContent = minutes
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("seconds").textContent = seconds
+          .toString()
+          .padStart(2, "0");
+      }
+
+      updateCountdown();
+
+      setInterval(updateCountdown, 1000);
+    </script>
+  </body>
+</html>
