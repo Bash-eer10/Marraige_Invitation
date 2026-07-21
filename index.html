@@ -32,7 +32,7 @@
         overflow-y: auto;
 
         scroll-behavior: smooth;
-        scroll-snap-type: y mandatory;
+       
         padding-left: env(safe-area-inset-left);
         padding-right: env(safe-area-inset-right);
         padding-top: env(safe-area-inset-top);
@@ -44,8 +44,7 @@
       #quoteSection {
         min-height: 100vh;
 
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
+       
       }
 
       /* ===========================
@@ -511,8 +510,7 @@
         -webkit-mask:
           linear-gradient(#000 0 0) content-box,
           linear-gradient(#000 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
+
 
         pointer-events: none;
       }
@@ -712,7 +710,6 @@
 
         overflow: hidden;
 
-        scroll-snap-align: start;
       }
 
       /* Background Video */
@@ -1120,14 +1117,7 @@
 
         started = true;
 
-        try {
-          bgMusic.volume = 1.0;
-          bgMusic.loop = true;
-          await bgMusic.play();
-          await video.play();
-        } catch (err) {
-          console.error("Playback failed:", err);
-        }
+    
       });
       video.addEventListener("contextmenu", (e) => e.preventDefault());
 
@@ -1142,10 +1132,7 @@
 
         setTimeout(() => {
           videoContainer.style.display = "none";
-          window.scrollTo({
-            top: 0,
-            behavior: "instant",
-          });
+          window.scrollTo(0, 0);
         }, 2000);
         endScreen.classList.add("show");
         setTimeout(() => {
