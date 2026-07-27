@@ -899,15 +899,14 @@
 
   <body>
     <div id="videoContainer">
-      <video
-        id="introVideo"
-  poster="poster.jpg"
-  muted
-  preload="metadata"
-  playsinline
-  controlsList="nodownload nofullscreen noremoteplayback"
-
-      >
+    <video
+    id="introVideo"
+    poster="poster.jpg"
+    muted
+    preload="auto"
+    playsinline
+    webkit-playsinline
+>
         <source src="Intro.mp4" type="video/mp4" />
         Your browser does not support HTML5 video.
       </video>
@@ -1117,10 +1116,16 @@
 
      window.addEventListener("load", () => {
     video.load();      // <-- important
-    video.pause();
+   
 
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+});
+
+      tapToStart.style.display = "none";
+
+video.addEventListener("loadeddata", () => {
+    tapToStart.style.display = "flex";
 });
 
       let started = false;
