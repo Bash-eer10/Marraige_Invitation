@@ -62,11 +62,12 @@
    VIDEO
 =========================== */
 
-     #videoContainer{
-    position:fixed;
-    inset:0;
-    background-color:#000;
-}
+ #videoContainer {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        transition: opacity 2s ease;
+      }
 
       #videoContainer.fade-out {
         opacity: 0;
