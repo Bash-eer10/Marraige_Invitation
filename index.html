@@ -895,6 +895,37 @@
           max-width: 340px;
         }
       }
+
+      .venueTime {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  margin: 18px 0;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f5d78b;
+
+  letter-spacing: 1px;
+}
+
+.venueTime i {
+  color: #ffd56a;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .venueTime {
+    font-size: 17px;
+  }
+
+  .venueTime i {
+    font-size: 16px;
+  }
+}
     </style>
   </head>
 
@@ -1022,57 +1053,61 @@
 
           <div class="venueWrapper">
             <div class="venue">
-              <div class="venueIcon">💍</div>
-              <h4>13th September 2026</h4>
-              <h3>Nikah Ceremony</h3>
+  <div class="venueIcon">💍</div>
+  <h4>13th September 2026</h4>
+  <h3>Nikah Ceremony</h3>
 
-              <span class="venueLine"></span>
+  <div class="venueTime">
+    <i class="fa-regular fa-clock"></i>
+    11:00 AM – 12:00 PM
+  </div>
 
-              <p>
-                Sangamam Mahal<br />
-                Podanur Main Road<br />
-                Kurichi Pirivu<br />
-                Coimbatore
-              </p>
+  <span class="venueLine"></span>
 
-              <a
-                href="https://maps.app.goo.gl/umSqtcycqNLKPRKr8"
-                target="_blank"
-                class="venueBtn"
-              >
-                <i
-                  class="fa-solid fa-map-location-dot"
-                  style="margin-right: 6px"
-                ></i>
-                View Location
-              </a>
-            </div>
+  <p>
+    Sangamam Mahal<br />
+    Podanur Main Road<br />
+    Kurichi Pirivu<br />
+    Coimbatore
+  </p>
 
-            <div class="venue">
-              <div class="venueIcon">🎉</div>
-              <h4>16th September 2026</h4>
-              <h3>Reception Ceremony</h3>
+  <a
+    href="https://maps.app.goo.gl/umSqtcycqNLKPRKr8"
+    target="_blank"
+    class="venueBtn"
+  >
+    <i class="fa-solid fa-map-location-dot" style="margin-right:6px"></i>
+    View Location
+  </a>
+</div>
 
-              <span class="venueLine"></span>
+          <div class="venue">
+  <div class="venueIcon">🎉</div>
+  <h4>16th September 2026</h4>
+  <h3>Reception Ceremony</h3>
 
-              <p>
-                Harini Mahal<br />
-                Bhavanisagar Road<br />
-                Punjai Puliampatti
-              </p>
+  <div class="venueTime">
+    <i class="fa-regular fa-clock"></i>
+    11:00 AM – 12:00 PM
+  </div>
 
-              <a
-                href="https://maps.app.goo.gl/epMJ1cdXhRdLV7qS8"
-                target="_blank"
-                class="venueBtn"
-              >
-                <i
-                  class="fa-solid fa-map-location-dot"
-                  style="margin-right: 6px"
-                ></i>
-                View Location
-              </a>
-            </div>
+  <span class="venueLine"></span>
+
+  <p>
+    Harini Mahal<br />
+    Bhavanisagar Road<br />
+    Punjai Puliampatti
+  </p>
+
+  <a
+    href="https://maps.app.goo.gl/epMJ1cdXhRdLV7qS8"
+    target="_blank"
+    class="venueBtn"
+  >
+    <i class="fa-solid fa-map-location-dot" style="margin-right:6px"></i>
+    View Location
+  </a>
+</div>
           </div>
         </div>
       </section>
